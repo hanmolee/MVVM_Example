@@ -2,6 +2,7 @@ package com.hanmo.mvvm_example.util
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.location.Location
 import android.location.LocationListener
@@ -14,29 +15,35 @@ class LocationLiveData(context: Context) : LiveData<Location>(), LocationListene
     private val locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     @SuppressLint("MissingPermission")
-    override fun onActive() {
-        Log.i("hanmolee", "onActive")
-        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null)
-    }
-
     override fun onInactive() {
-        Log.i("hanmolee", "onInactive")
+        Log.e("hanmolee", "Inactive")
         locationManager.removeUpdates(this)
     }
-    override fun onLocationChanged(location: Location?) {
 
+    @SuppressLint("MissingPermission")
+    fun refreshLocation() {
+        Log.e("hanmolee", "refreshLocation")
+        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null )
+        val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        Log.e("hanmolee", "refreshLocation Last longitude : ${lastLocation.longitude}  latitude : ${lastLocation.latitude}")
+        value = lastLocation
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        Log.e("hanmolee", "onLocationChange $location")
+        value = location
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onProviderEnabled(provider: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onProviderDisabled(provider: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 }
