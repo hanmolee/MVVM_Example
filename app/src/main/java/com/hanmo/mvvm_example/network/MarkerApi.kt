@@ -8,6 +8,6 @@ import retrofit2.http.Query
 interface MarkerApi {
 
     @GET("")
-    fun getMarker(@Query("locationName") locationName: String, @Query("latitude") latitude : String, @Query("longitude") longitude : String) : Single<Marker>
+    fun getMarker(@Query("locationName") locationName: String?, @Query("latitude") latitude : String?, @Query("longitude") longitude : String?) : Single<Marker>
 
 }
